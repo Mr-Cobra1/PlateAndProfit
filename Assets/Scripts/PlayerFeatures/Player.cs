@@ -18,7 +18,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
     }
 
 
-    [SerializeField] private float moveSpeed = 5f;
+    //[SerializeField] private float moveSpeed = 5f;
     [SerializeField] private GameInput gameInput;
     [SerializeField] private LayerMask countersLayerMask;
     [SerializeField] private Transform kitchenObjectHoldPoint;
@@ -66,7 +66,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
 
     private void Update()
     {
-        HandleMovement();
+        //HandleMovement();
         HandleInteraction();
     }
 
@@ -77,6 +77,8 @@ public class Player : MonoBehaviour, IKitchenObjectParent
 
     private void HandleInteraction()
     {
+        //OLD SYSTEM (movement-based direction)
+        /*
         Vector2 inputVector = gameInput.GetMovementVectorNormalized();
         Vector3 moveDir = new Vector3(inputVector.x, 0f, inputVector.y);
 
@@ -84,9 +86,21 @@ public class Player : MonoBehaviour, IKitchenObjectParent
         {
             lastInteractDir = moveDir;
         }
+        */
 
-        float interactDistance = 2f;
+        // NEW SYSTEM (camera-based direction for FPS)
+        Vector3 rayOrigin = Camera.main.transform.position;
+        Vector3 rayDirection = Camera.main.transform.forward;
+
+        float interactDistance = 2.5f;
+
+        // OLD RAYCAST
+        /*
         if (Physics.Raycast(transform.position, lastInteractDir, out RaycastHit raycastHit, interactDistance, countersLayerMask))
+        */
+
+        // NEW RAYCAST
+        if (Physics.Raycast(rayOrigin, rayDirection, out RaycastHit raycastHit, interactDistance, countersLayerMask))
         {
             if (raycastHit.transform.TryGetComponent(out BaseCounter baseCounter))
             {
@@ -107,43 +121,43 @@ public class Player : MonoBehaviour, IKitchenObjectParent
         }
     }
 
-    private void HandleMovement()
-    {
-        Vector2 inputVector = gameInput.GetMovementVectorNormalized();
-        Vector3 moveDir = new Vector3(inputVector.x, 0f, inputVector.y);
-        float moveDistance = moveSpeed * Time.deltaTime;
-        float playerRadius = 0.7f;
-        float playerHeight = 2f;
-        bool canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDir, moveDistance);
-        
-        if (!canMove)
-        {
-            // Try to move only in the X direction
-            Vector3 moveDirX = new Vector3(moveDir.x, 0f, 0f).normalized;
-            canMove = moveDir.x != 0 && !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDirX, moveDistance);
-            if (canMove)
-            {
-                moveDir = moveDirX;
-            }
-            else
-            {
-                // Try to move only in the Z direction
-                Vector3 moveDirZ = new Vector3(0f, 0f, moveDir.z).normalized;
-                canMove = moveDir.z != 0 && !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDirZ, moveDistance);
-                if (canMove)
-                {
-                    moveDir = moveDirZ;
-                }
-            }
-        }
-        if (canMove)
-        {
-            transform.position += moveDir * moveDistance;
-        }
-        isWalking = moveDir != Vector3.zero;
-        float rotateSpeed = 10f;
-        transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * rotateSpeed);
-    }
+    //private void HandleMovement()
+    //{
+    //    Vector2 inputVector = gameInput.GetMovementVectorNormalized();
+    //    Vector3 moveDir = new Vector3(inputVector.x, 0f, inputVector.y);
+    //    float moveDistance = moveSpeed * Time.deltaTime;
+    //    float playerRadius = 0.7f;
+    //    float playerHeight = 2f;
+    //    bool canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDir, moveDistance);
+
+    //    if (!canMove)
+    //    {
+    //        // Try to move only in the X direction
+    //        Vector3 moveDirX = new Vector3(moveDir.x, 0f, 0f).normalized;
+    //        canMove = moveDir.x != 0 && !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDirX, moveDistance);
+    //        if (canMove)
+    //        {
+    //            moveDir = moveDirX;
+    //        }
+    //        else
+    //        {
+    //            // Try to move only in the Z direction
+    //            Vector3 moveDirZ = new Vector3(0f, 0f, moveDir.z).normalized;
+    //            canMove = moveDir.z != 0 && !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDirZ, moveDistance);
+    //            if (canMove)
+    //            {
+    //                moveDir = moveDirZ;
+    //            }
+    //        }
+    //    }
+    //    if (canMove)
+    //    {
+    //        transform.position += moveDir * moveDistance;
+    //    }
+    //    isWalking = moveDir != Vector3.zero;
+    //    float rotateSpeed = 10f;
+    //    transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * rotateSpeed);
+    //}
 
     private void SetSelectedCounter(BaseCounter selectedCounter)
     {

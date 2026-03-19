@@ -36,11 +36,13 @@ public class GamePauseUI : MonoBehaviour
     private void KitchenGameManager_OnGameUnPaused(object sender, EventArgs e)
     {
         Hide();
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void KitchenGameManager_OnGamePaused(object sender, EventArgs e)
     {
         Show();
+        Cursor.lockState = CursorLockMode.None;
     }
 
     private void Show()
@@ -50,7 +52,7 @@ public class GamePauseUI : MonoBehaviour
 
     private void Hide()
     {
-            gameObject.SetActive(false);
+        gameObject.SetActive(false);
     }
 
 }

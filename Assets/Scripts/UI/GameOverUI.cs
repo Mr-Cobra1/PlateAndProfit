@@ -1,6 +1,8 @@
+using StarterAssets;
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Windows;
 
 public class GameOverUI : MonoBehaviour
 {
@@ -19,6 +21,7 @@ public class GameOverUI : MonoBehaviour
         if (KitchenGameManager.Instance.IsGameOver())
         {
             Show();
+            Cursor.lockState = CursorLockMode.Confined;
 
             int recipesDelieveredValue = Mathf.CeilToInt(DeliveryManager.Instance.GetSuccessfulRecipesAmount());
             recipesDelieveredText.text = recipesDelieveredValue.ToString();

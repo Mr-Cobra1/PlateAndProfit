@@ -38,6 +38,7 @@ public class KitchenGameManager : MonoBehaviour
     private void Start()
     {
         GameInput.Instance.OnPauseAction += GameInput_OnPauseAction;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void GameInput_OnPauseAction(object sender, EventArgs e)
