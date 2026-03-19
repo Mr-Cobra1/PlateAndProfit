@@ -4083,8 +4083,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KitchenGameManager
   waitingToStartTimer: 0
-  countdownToStartTimer: 3
-  gamePlayingTimerMax: 5
+  countdownToStartTimer: 1
+  gamePlayingTimerMax: 30
 --- !u!4 &966151699
 Transform:
   m_ObjectHideFlags: 0
